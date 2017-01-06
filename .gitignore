@@ -1,0 +1,7 @@
+*.suo
+LagomVulkan/x64/
+LagomVulkan/Debug/
+*.sdf
+*.pdb
+*.ilk
+Debug/
