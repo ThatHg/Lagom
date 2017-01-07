@@ -11,6 +11,7 @@
 
 Renderer::Renderer()
 {
+    _setup_layers_and_extensions();
     _setup_debug();
     _init_instance();
     _init_debug();
@@ -28,7 +29,7 @@ Renderer::~Renderer()
 
 Window * Renderer::create_window(uint32_t size_x, uint32_t size_y, std::string name)
 {
-    _window = new Window(size_x, size_y, name);
+    _window = new Window(this, size_x, size_y, name);
     return _window;
 }
 
@@ -38,6 +39,50 @@ bool Renderer::run()
         return _window->update();
     }
     return true;
+}
+
+const VkPhysicalDevice Renderer::get_vulkan_physical_device() const
+{
+    return _gpu;
+}
+
+const VkInstance Renderer::get_vulkan_instance() const
+{
+    return _instance;
+}
+
+const VkDevice Renderer::get_vulkan_device() const
+{
+    return _device;
+}
+
+const VkQueue Renderer::get_vulkan_queue() const
+{
+    return _queue;
+}
+
+const uint32_t Renderer::get_vulkan_graphics_family_index() const
+{
+    return _graphics_family_index;
+}
+
+const VkPhysicalDeviceProperties & Renderer::get_vulkan_physical_device_properties() const
+{
+    return _gpu_properties;
+}
+
+const VkPhysicalDeviceMemoryProperties & Renderer::get_vulkan_physical_device_memory_properties() const
+{
+    return _gpu_memory_properties;
+}
+
+void Renderer::_setup_layers_and_extensions()
+{
+    //_instance_extensions.push_back(VK_KHR_DISPLAY_EXTENSION_NAME);
+    _instance_extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+    _instance_extensions.push_back(PLATFORM_SURFACE_EXTENSION_NAME);
+
+    _device_extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 }
 
 void Renderer::_init_instance()
@@ -77,6 +122,7 @@ void Renderer::_init_device()
         vkEnumeratePhysicalDevices(_instance, &gpu_count, gpu_list.data());
         _gpu = gpu_list[0];
         vkGetPhysicalDeviceProperties(_gpu, &_gpu_properties);
+        vkGetPhysicalDeviceMemoryProperties(_gpu, &_gpu_memory_properties);
     }
     // Find family index with graphics bit support
     {
@@ -183,7 +229,7 @@ VulkanDebugCallback(
     stream << msg << std::endl;
     std::cout << stream.str();
 
-#ifdef _WIN32
+#if defined(_WIN32)
     if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
         MessageBox(NULL, (LPCWSTR)stream.str().c_str(), (LPCWSTR)"Vulkan Error!", 0);
     }

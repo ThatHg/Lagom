@@ -1,6 +1,7 @@
 #include "BUILD_OPTIONS.h"
 #include "platform.h"
 #include "window.h"
+#include "renderer.h"
 #include <assert.h>
 
 #if VK_USE_PLATFORM_WIN32_KHR
@@ -102,6 +103,15 @@ void Window::_update_os_window()
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+}
+
+void Window::_init_os_surface() {
+    VkWin32SurfaceCreateInfoKHR create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    create_info.hinstance = _win32_instance;
+    create_info.hwnd = _win32_window;
+
+    vkCreateWin32SurfaceKHR(_renderer->get_vulkan_instance(), &create_info, nullptr, &_surface);
 }
 
 #endif

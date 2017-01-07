@@ -70,6 +70,22 @@ void error_check(VkResult result) {
     }
 }
 
+uint32_t find_memory_type_index(
+    const VkPhysicalDeviceMemoryProperties * gpu_memory_properties, 
+    const VkMemoryRequirements * memory_requirements, 
+    const VkMemoryPropertyFlags required_properties)
+{
+    for (uint32_t i = 0; i < gpu_memory_properties->memoryTypeCount; ++i) {
+        if (memory_requirements->memoryTypeBits & (1 << i)) {
+            if ((gpu_memory_properties->memoryTypes[i].propertyFlags & required_properties) == required_properties) {
+                return i;
+            }
+        }
+    }
+    assert(0);
+    return UINT32_MAX;
+}
+
 #else
 
 void error_check(VkResult result) {};
