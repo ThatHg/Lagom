@@ -186,6 +186,8 @@ void Renderer::_init_device()
 
     error_check(vkCreateDevice(_gpu, &device_create_info, nullptr, &_device));
 
+    vkGetDeviceQueue(_device, _graphics_family_index, 0, &_queue);
+
 }
 
 void Renderer::_deinit_device()

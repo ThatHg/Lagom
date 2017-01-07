@@ -15,6 +15,13 @@ public:
     void close();
     bool update();
 
+    void begin_render();
+    void end_render(std::vector<VkSemaphore> wait_semaphores);
+
+    const VkRenderPass get_vulkan_render_pass() const;
+    const VkFramebuffer get_vulkan_active_framebuffer() const;
+    const VkExtent2D get_vulkan_surface_size() const;
+
 private:
     void _init_os_window();
     void _deinit_os_window();
@@ -36,6 +43,12 @@ private:
     void _init_render_pass();
     void _deinit_render_pass();
 
+    void _init_framebuffers();
+    void _deinit_framebuffers();
+
+    void _init_synchronizations();
+    void _deinit_synchronizations();
+
     Renderer* _renderer = nullptr;
 
     VkSurfaceKHR _surface = VK_NULL_HANDLE;
@@ -46,6 +59,9 @@ private:
     uint32_t _surface_size_y = 512;
     std::string _window_name = "Lagomt Vulkan";
     uint32_t _swapchain_image_count = 2;
+    uint32_t _active_swapchain_image_id = UINT32_MAX;
+
+    VkFence _swapchain_image_available = VK_NULL_HANDLE;
 
     VkSurfaceFormatKHR _surface_format = {};
     VkSurfaceCapabilitiesKHR _surface_capabilities = {};
@@ -53,6 +69,8 @@ private:
 
     std::vector<VkImage> _swapchain_images;
     std::vector<VkImageView> _swapchain_image_views;
+    std::vector<VkFramebuffer> _framebuffers;
+
     VkImage _depth_stencil_image = VK_NULL_HANDLE;
     VkDeviceMemory _depth_stencil_image_memory = VK_NULL_HANDLE;
     VkImageView _depth_stencil_image_view = VK_NULL_HANDLE;

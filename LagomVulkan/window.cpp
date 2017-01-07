@@ -16,10 +16,15 @@ Window::Window(Renderer* renderer, uint32_t size_x, uint32_t size_y, std::string
     _init_swapchain_images();
     _init_depth_stencil_image();
     _init_render_pass();
+    _init_framebuffers();
+    _init_synchronizations();
 }
 
 Window::~Window()
 {
+    error_check(vkQueueWaitIdle(_renderer->get_vulkan_queue()));
+    _deinit_synchronizations();
+    _deinit_framebuffers();
     _deinit_render_pass();
     _deinit_depth_stencil_image();
     _deinit_swapchain_images();
@@ -37,6 +42,52 @@ bool Window::update()
 {
     _update_os_window();
     return _window_should_run;
+}
+
+void Window::begin_render()
+{
+    error_check(vkAcquireNextImageKHR(
+        _renderer->get_vulkan_device(), 
+        _swapchain, 
+        UINT64_MAX, 
+        VK_NULL_HANDLE, 
+        _swapchain_image_available, 
+        &_active_swapchain_image_id));
+    error_check(vkWaitForFences(_renderer->get_vulkan_device(), 1, &_swapchain_image_available, VK_TRUE, UINT64_MAX));
+    error_check(vkResetFences(_renderer->get_vulkan_device(), 1, &_swapchain_image_available));
+    error_check(vkQueueWaitIdle( _renderer->get_vulkan_queue()));
+}
+
+void Window::end_render(std::vector<VkSemaphore> wait_semaphores)
+{
+    VkResult present_result = VkResult::VK_RESULT_MAX_ENUM;
+
+    VkPresentInfoKHR present_info{};
+    present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    present_info.waitSemaphoreCount = wait_semaphores.size();
+    present_info.pWaitSemaphores = wait_semaphores.data();
+    present_info.swapchainCount = 1;
+    present_info.pSwapchains = &_swapchain;
+    present_info.pImageIndices = &_active_swapchain_image_id;
+    present_info.pResults = &present_result;
+    
+    error_check(vkQueuePresentKHR(_renderer->get_vulkan_queue(), &present_info)); 
+    error_check(present_result);
+}
+
+const VkRenderPass Window::get_vulkan_render_pass() const
+{
+    return _render_pass;
+}
+
+const VkFramebuffer Window::get_vulkan_active_framebuffer() const
+{
+    return _framebuffers[_active_swapchain_image_id];
+}
+
+const VkExtent2D Window::get_vulkan_surface_size() const
+{
+    return {_surface_size_x, _surface_size_y};
 }
 
 void Window::_init_surface() {
@@ -302,4 +353,43 @@ void Window::_init_render_pass()
 void Window::_deinit_render_pass()
 {
     vkDestroyRenderPass(_renderer->get_vulkan_device(), _render_pass, nullptr);
+}
+
+void Window::_init_framebuffers()
+{
+    _framebuffers.resize(_swapchain_image_count);
+    for (uint32_t i = 0; i < _swapchain_image_count; ++i) {
+        std::array<VkImageView, 2> attachments{};
+        attachments[0] = _depth_stencil_image_view;
+        attachments[1] = _swapchain_image_views[i];
+
+        VkFramebufferCreateInfo framebuffer_create_info{};
+        framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebuffer_create_info.renderPass = _render_pass;
+        framebuffer_create_info.attachmentCount = attachments.size();
+        framebuffer_create_info.pAttachments = attachments.data();
+        framebuffer_create_info.width = _surface_size_x;
+        framebuffer_create_info.height = _surface_size_y;
+        framebuffer_create_info.layers = 1;
+        error_check(vkCreateFramebuffer(_renderer->get_vulkan_device(), &framebuffer_create_info, nullptr, &_framebuffers[i]));
+    }
+}
+
+void Window::_deinit_framebuffers()
+{
+    for (uint32_t i = 0; i < _swapchain_image_count; ++i) {
+        vkDestroyFramebuffer(_renderer->get_vulkan_device(), _framebuffers[i], nullptr);
+    }
+}
+
+void Window::_init_synchronizations()
+{
+    VkFenceCreateInfo fence_create_info{};
+    fence_create_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    error_check(vkCreateFence(_renderer->get_vulkan_device(), &fence_create_info, nullptr, &_swapchain_image_available));
+}
+
+void Window::_deinit_synchronizations()
+{
+    vkDestroyFence(_renderer->get_vulkan_device(), _swapchain_image_available, nullptr);
 }
