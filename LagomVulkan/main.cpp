@@ -1,6 +1,8 @@
 #include "renderer.h"
 #include "window.h"
 #include "shared.h"
+#include "locator.h"
+#include "audio_open_al.h"
 #include <array>
 #include <chrono>
 
@@ -12,6 +14,11 @@ constexpr double CIRCLE_THIRD_2 = CIRCLE_THIRD;
 constexpr double CIRCLE_THIRD_3 = CIRCLE_THIRD * 2;
 
 int main() {
+    AudioOpenAL* a = new AudioOpenAL();
+    Locator::initialize();
+    Locator::register_audio(a);
+    delete a;
+
     Renderer r;
     Window* w = r.create_window(1280, 720, "Lagomt Vulkan");
 
@@ -64,14 +71,14 @@ int main() {
         render_area.offset.y = 0;
         render_area.extent = w->get_vulkan_surface_size();
 
-        color_rotation += 0.001;
+        color_rotation += 0.01f;
 
         std::array<VkClearValue, 2> clear_values{};
         clear_values[0].depthStencil.depth = 0.0f;
         clear_values[0].depthStencil.stencil = 0;
-        clear_values[1].color.float32[0] = std::sin(color_rotation + CIRCLE_THIRD_1) * 0.5 + 0.5;
-        clear_values[1].color.float32[1] = std::sin(color_rotation + CIRCLE_THIRD_2) * 0.5 + 0.5;
-        clear_values[1].color.float32[2] = std::sin(color_rotation + CIRCLE_THIRD_3) * 0.5 + 0.5;
+        clear_values[1].color.float32[0] = std::sin(color_rotation + (float)CIRCLE_THIRD_1) * 0.5f + 0.5f;
+        clear_values[1].color.float32[1] = std::sin(color_rotation + (float)CIRCLE_THIRD_2) * 0.5f + 0.5f;
+        clear_values[1].color.float32[2] = std::sin(color_rotation + (float)CIRCLE_THIRD_3) * 0.5f + 0.5f;
         clear_values[1].color.float32[3] = 1.0f;
 
         VkRenderPassBeginInfo render_pass_begin_info{};
@@ -79,7 +86,7 @@ int main() {
         render_pass_begin_info.renderPass = w->get_vulkan_render_pass();
         render_pass_begin_info.framebuffer = w->get_vulkan_active_framebuffer();
         render_pass_begin_info.renderArea = render_area;
-        render_pass_begin_info.clearValueCount = clear_values.size();
+        render_pass_begin_info.clearValueCount = (uint32_t)clear_values.size();
         render_pass_begin_info.pClearValues = clear_values.data();
 
         vkCmdBeginRenderPass(command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
