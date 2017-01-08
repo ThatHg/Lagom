@@ -89,14 +89,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32\include;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32\include;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories);C:\Program Files %28x86%29\OpenAL 1.1 SDK\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin32;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,13 +107,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories);C:\Program Files %28x86%29\OpenAL 1.1 SDK\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32\include;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32\include;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories);C:\Program Files %28x86%29\OpenAL 1.1 SDK\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -134,8 +134,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin32;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,18 +148,20 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glfw-3.2.1.bin.WIN32;..\libs\glm;C:\VulkanSDK\1.0.37.0\Include;%(AdditionalIncludeDirectories);C:\Program Files %28x86%29\OpenAL 1.1 SDK\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\VulkanSDK\1.0.37.0\Bin;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio_open_al.cpp" />
+    <ClCompile Include="locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="shared.cpp" />
@@ -167,7 +169,10 @@
     <ClCompile Include="window_win32.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio.h" />
+    <ClInclude Include="audio_open_al.h" />
     <ClInclude Include="BUILD_OPTIONS.h" />
+    <ClInclude Include="locator.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="shared.h" />
