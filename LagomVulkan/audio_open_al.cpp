@@ -72,6 +72,9 @@ bool AudioOpenAL::_load_wave(
     ALenum * format, 
     unsigned char* data)
 {
+    std::cout << "\nAudio not implemented yet!" << std::endl;
+    return false;
+
     FILE* audio_file = nullptr;
     RIFFHeader riff_header;
     WAVEFormat wave_format;

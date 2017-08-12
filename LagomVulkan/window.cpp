@@ -64,7 +64,7 @@ void Window::end_render(std::vector<VkSemaphore> wait_semaphores)
 
     VkPresentInfoKHR present_info{};
     present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    present_info.waitSemaphoreCount = wait_semaphores.size();
+    present_info.waitSemaphoreCount = (uint32_t)wait_semaphores.size();
     present_info.pWaitSemaphores = wait_semaphores.data();
     present_info.swapchainCount = 1;
     present_info.pSwapchains = &_swapchain;
@@ -336,15 +336,15 @@ void Window::_init_render_pass()
 
     std::array<VkSubpassDescription, 1> sub_passes{};
     sub_passes[0].pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    sub_passes[0].colorAttachmentCount = sub_pass_0_color_attachments.size();
+    sub_passes[0].colorAttachmentCount = (uint32_t)sub_pass_0_color_attachments.size();
     sub_passes[0].pColorAttachments = sub_pass_0_color_attachments.data();
     sub_passes[0].pDepthStencilAttachment = &sub_pass_0_stencil_attachments;
 
     VkRenderPassCreateInfo render_pass_create_info{};
     render_pass_create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    render_pass_create_info.attachmentCount = attachments.size();
+    render_pass_create_info.attachmentCount = (uint32_t)attachments.size();
     render_pass_create_info.pAttachments = attachments.data();
-    render_pass_create_info.subpassCount = sub_passes.size();
+    render_pass_create_info.subpassCount = (uint32_t)sub_passes.size();
     render_pass_create_info.pSubpasses = sub_passes.data();
 
     error_check(vkCreateRenderPass(_renderer->get_vulkan_device(), &render_pass_create_info, nullptr, &_render_pass));
@@ -366,7 +366,7 @@ void Window::_init_framebuffers()
         VkFramebufferCreateInfo framebuffer_create_info{};
         framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebuffer_create_info.renderPass = _render_pass;
-        framebuffer_create_info.attachmentCount = attachments.size();
+        framebuffer_create_info.attachmentCount = (uint32_t)attachments.size();
         framebuffer_create_info.pAttachments = attachments.data();
         framebuffer_create_info.width = _surface_size_x;
         framebuffer_create_info.height = _surface_size_y;

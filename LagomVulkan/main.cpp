@@ -14,10 +14,10 @@ constexpr double CIRCLE_THIRD_2 = CIRCLE_THIRD;
 constexpr double CIRCLE_THIRD_3 = CIRCLE_THIRD * 2;
 
 int main() {
-    AudioOpenAL* a = new AudioOpenAL();
+    /*AudioOpenAL* a = new AudioOpenAL();
     Locator::initialize();
     Locator::register_audio(a);
-    delete a;
+    delete a;*/
 
     Renderer r;
     Window* w = r.create_window(1280, 720, "Lagomt Vulkan");
